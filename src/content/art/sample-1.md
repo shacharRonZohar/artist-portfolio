@@ -1,5 +1,6 @@
 ---
 title: "Untitled No. 1"
+artist: "him"
 description: "A study in form and light"
 image: "images/art/sample-1.svg"
 date: 2024-03-15

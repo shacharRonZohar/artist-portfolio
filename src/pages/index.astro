@@ -3,62 +3,114 @@ import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
-const works = (await getCollection('art')).sort(
-  (a, b) => b.data.order - a.data.order || b.data.date.getTime() - a.data.date.getTime()
-);
+const allWorks = await getCollection('art');
+const himCount = allWorks.filter((w) => w.data.artist === 'him').length;
+const herCount = allWorks.filter((w) => w.data.artist === 'her').length;
 ---
 
-<Layout title="Portfolio" description="A selection of recent work">
-  <div class="gallery">
-    {works.map((work) => (
-      <a href={`${base}art/${work.slug}`} class="card">
-        <img src={`${base}${work.data.image.replace(/^\//, '')}`} alt={work.data.title} loading="lazy" />
-        <div class="info">
-          <h2>{work.data.title}</h2>
-          {work.data.medium && <span>{work.data.medium}</span>}
+<Layout title="Two Artists" description="A portfolio of two artists">
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Two Artists,<br/>One Canvas</h1>
+      <p>A shared portfolio of two distinct voices.</p>
+    </div>
+    <div class="split">
+      <a href={`${base}him`} class="half him">
+        <div class="half-content">
+          <h2>His Work</h2>
+          <p>{himCount} {himCount === 1 ? 'piece' : 'pieces'}</p>
+          <span class="cta">View his art &rarr;</span>
         </div>
       </a>
-    ))}
-  </div>
+      <a href={`${base}her`} class="half her">
+        <div class="half-content">
+          <h2>Her Work</h2>
+          <p>{herCount} {herCount === 1 ? 'piece' : 'pieces'}</p>
+          <span class="cta">View her art &rarr;</span>
+        </div>
+      </a>
+    </div>
+  </section>
 </Layout>
 
 <style>
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+  .hero {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
   }
 
-  .card {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    transition: opacity 0.2s;
-  }
-  .card:hover { opacity: 0.8; }
-
-  .card img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    background: #f0f0f0;
+  .hero-text {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
   }
 
-  .info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
+  .hero-text h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
   }
 
-  .info h2 {
-    font-size: 0.95rem;
-    font-weight: 500;
-  }
-
-  .info span {
-    font-size: 0.85rem;
+  .hero-text p {
+    margin-top: 0.75rem;
     color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 50vh;
+    margin-top: 2rem;
+  }
+
+  .half {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    transition: flex 0.3s ease;
+  }
+
+  .him { background: #2b3a4a; }
+  .her { background: #7a3b5e; }
+
+  .half:hover { flex: 1.3; }
+  .half:hover .cta { transform: translateX(4px); }
+
+  .half-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .half-content h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  .half-content p {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  .cta {
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+
+  @media (max-width: 640px) {
+    .split {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    .half { min-height: 30vh; }
   }
 </style>

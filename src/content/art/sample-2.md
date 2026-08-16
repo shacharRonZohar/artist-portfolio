@@ -1,5 +1,6 @@
 ---
 title: "Untitled No. 2"
+artist: "her"
 description: "Color field experiment"
 image: "images/art/sample-2.svg"
 date: 2024-05-20

@@ -23,7 +23,7 @@ const { Content } = await render(work);
 
 <Layout title={work.data.title} description={work.data.description}>
   <article class="detail">
-    <a href={base} class="back">&larr; Back</a>
+    <a href={`${base}${work.data.artist}`} class="back">&larr; {work.data.artist === 'him' ? 'His' : 'Her'} Work</a>
     <img src={`${base}${work.data.image.replace(/^\//, '')}`} alt={work.data.title} />
     <div class="meta">
       <h1>{work.data.title}</h1>

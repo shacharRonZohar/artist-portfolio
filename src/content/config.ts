@@ -4,6 +4,7 @@ const art = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
+    artist: z.enum(['him', 'her']),
     description: z.string().optional(),
     image: z.string(),
     date: z.coerce.date(),

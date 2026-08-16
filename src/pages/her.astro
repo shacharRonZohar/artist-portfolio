@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Gallery from '../components/Gallery.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout title="Her Work" description="Gallery of her artwork">
+  <a href={base} class="back">&larr; Home</a>
+  <Gallery artist="her" label="Her Work" />
+</Layout>
+
+<style>
+  .back {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .back:hover { color: var(--fg); }
+</style>

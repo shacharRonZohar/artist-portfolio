@@ -1,5 +1,6 @@
 ---
 title: "Untitled No. 3"
+artist: "him"
 description: "Charcoal drawing"
 image: "images/art/sample-3.svg"
 date: 2024-07-01
