@@ -1,12 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Gallery from '../components/Gallery.astro';
+import Layout from '../../layouts/Layout.astro';
+import Gallery from '../../components/Gallery.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
 
-<Layout title="His Work" description="Gallery of his artwork">
-  <a href={base} class="back">&larr; Home</a>
+<Layout title="His Gallery" description="Gallery of his artwork">
+  <a href={`${base}him/about`} class="back">About &rarr;</a>
   <Gallery artist="him" label="His Work" />
 </Layout>
 
