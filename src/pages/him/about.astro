@@ -1,9 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
-const count = (await getCollection('art')).filter((w) => w.data.artist === 'him').length;
 ---
 
 <Layout title="His About" description="About the artist">
@@ -24,15 +22,12 @@ const count = (await getCollection('art')).filter((w) => w.data.artist === 'him'
       <div class="content-section">
         <span class="eyebrow">Artist No. 1</span>
         <h1>His Work</h1>
-        <p class="statement">
-          This is where the artist statement goes. Replace this text in
-          <code>src/pages/him/about.astro</code> with the actual artist statement —
-          a paragraph or two describing the work, its themes, and the artist's
-          approach to their medium.
-        </p>
-        <p class="statement">
-          Currently {count} {count === 1 ? 'piece' : 'pieces'} in the gallery.
-        </p>
+        <div class="statement">
+          <p>My creative practice evolves at the intersection of classical academic traditions and modern visual exploration.</p>
+          <p>Drawing upon a solid foundation in fine arts and history of arts, my work navigates between structure and emotion, discipline and intuitive expression.</p>
+          <p>Deeply inspired by nature, mythology, human psychology, and the complexities of memory, I seek to create paintings that go beyond mere visual decoration. Through a thoughtful dialogue of form, line, and color, I aim to evoke atmospheric, contemplative spaces that invite the viewer into an inner narrative.</p>
+          <p>Having absorbed both classical Russian academic training and the vibrant light and energy of the Middle East, my palette and texture reflect a synthesis of cultures. Whether working with narrative figurative compositions or atmospheric imagery, my primary goal is to capture transient emotional states and spark an open-ended dialogue between the artwork and the observer.</p>
+        </div>
 
         <div class="contact">
           <h2>Contact</h2>

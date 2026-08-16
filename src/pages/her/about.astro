@@ -1,9 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
-const count = (await getCollection('art')).filter((w) => w.data.artist === 'her').length;
 ---
 
 <Layout title="Her About" description="About the artist">
@@ -24,15 +22,12 @@ const count = (await getCollection('art')).filter((w) => w.data.artist === 'her'
       <div class="content-section">
         <span class="eyebrow">Artist No. 2</span>
         <h1>Her Work</h1>
-        <p class="statement">
-          This is where the artist statement goes. Replace this text in
-          <code>src/pages/her/about.astro</code> with the actual artist statement —
-          a paragraph or two describing the work, its themes, and the artist's
-          approach to their medium.
-        </p>
-        <p class="statement">
-          Currently {count} {count === 1 ? 'piece' : 'pieces'} in the gallery.
-        </p>
+        <div class="statement">
+          <p>I create imagined worlds where emotional truth matters more than reality.</p>
+          <p>My paintings are not built around stories, but around states of being. Within these worlds, contradiction becomes part of beauty itself, allowing irony to coexist with melancholy, elegance with quiet anxiety, and vulnerability with carefully constructed composure. Rather than illustrating narratives, I create images that invite viewers to feel them before they attempt to explain them.</p>
+          <p>My paintings are never portraits of specific individuals. Instead, they become embodiments of emotional experience. They exist somewhere between memory and imagination, inviting viewers to recognize fragments of themselves within them.</p>
+          <p>Nothing in these paintings asks to be resolved. Contradiction is not a conflict to overcome, but a condition to inhabit. Every painting remains intentionally open, inviting viewers to bring their own memories, emotions and questions into the work. I am less interested in offering answers than in creating images that continue unfolding long after the first glance.</p>
+        </div>
 
         <div class="contact">
           <h2>Contact</h2>
