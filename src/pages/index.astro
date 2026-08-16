@@ -4,28 +4,42 @@ import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
 const allWorks = await getCollection('art');
-const himCount = allWorks.filter((w) => w.data.artist === 'him').length;
-const herCount = allWorks.filter((w) => w.data.artist === 'her').length;
+const sortByRecent = (a: typeof allWorks[number], b: typeof allWorks[number]) =>
+  b.data.date.getTime() - a.data.date.getTime();
+
+const himWorks = allWorks.filter((w) => w.data.artist === 'him').sort(sortByRecent);
+const herWorks = allWorks.filter((w) => w.data.artist === 'her').sort(sortByRecent);
+
+const himCover = himWorks[0]?.data.image;
+const herCover = herWorks[0]?.data.image;
+const himCount = himWorks.length;
+const herCount = herWorks.length;
 ---
 
 <Layout title="Two Artists" description="A portfolio of two artists">
   <section class="hero">
-    <div class="hero-text">
-      <h1>Two Artists,<br/>One Canvas</h1>
-      <p>A shared portfolio of two distinct voices.</p>
+    <div class="hero-intro">
+      <span class="eyebrow">A shared portfolio</span>
+      <h1>Two Artists<span class="thin">,</span> One Canvas</h1>
     </div>
     <div class="split">
-      <a href={`${base}him`} class="half him">
-        <div class="half-content">
-          <h2>His Work</h2>
-          <p>{himCount} {himCount === 1 ? 'piece' : 'pieces'}</p>
+      <a href={`${base}him`} class="panel him" style={himCover ? `--cover: url('${base}${himCover.replace(/^\//, '')}')` : ''}>
+        <div class="panel-inner">
+          <div class="panel-meta">
+            <span class="label">Artist No. 1</span>
+            <h2>His Work</h2>
+            <p class="count">{himCount} {himCount === 1 ? 'piece' : 'pieces'}</p>
+          </div>
           <span class="cta">View his art &rarr;</span>
         </div>
       </a>
-      <a href={`${base}her`} class="half her">
-        <div class="half-content">
-          <h2>Her Work</h2>
-          <p>{herCount} {herCount === 1 ? 'piece' : 'pieces'}</p>
+      <a href={`${base}her`} class="panel her" style={herCover ? `--cover: url('${base}${herCover.replace(/^\//, '')}')` : ''}>
+        <div class="panel-inner">
+          <div class="panel-meta">
+            <span class="label">Artist No. 2</span>
+            <h2>Her Work</h2>
+            <p class="count">{herCount} {herCount === 1 ? 'piece' : 'pieces'}</p>
+          </div>
           <span class="cta">View her art &rarr;</span>
         </div>
       </a>
@@ -35,75 +49,153 @@ const herCount = allWorks.filter((w) => w.data.artist === 'her').length;
 
 <style>
   .hero {
-    max-width: 100%;
-    padding: 0;
-    margin: 0;
+    margin: calc(-1 * var(--gap));
+    display: flex;
+    flex-direction: column;
   }
 
-  .hero-text {
+  /* Intro */
+  .hero-intro {
     text-align: center;
-    padding: 4rem 2rem 2rem;
+    padding: 4rem 2rem 3rem;
   }
 
-  .hero-text h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-
-  .hero-text p {
-    margin-top: 0.75rem;
+  .eyebrow {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    font-size: 0.72rem;
     color: var(--muted);
-    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
   }
 
+  .hero-intro h1 {
+    font-size: clamp(2rem, 5.5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .thin { font-weight: 200; }
+
+  /* Split panels */
   .split {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 50vh;
-    margin-top: 2rem;
+    min-height: 55vh;
   }
 
-  .half {
+  .panel {
+    position: relative;
     text-decoration: none;
     color: #fff;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 3rem 2rem;
-    transition: flex 0.3s ease;
+    align-items: flex-end;
+    padding: 2.5rem;
+    /* Diagonal cut between panels */
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transition: clip-path 0.4s ease;
   }
 
-  .him { background: #2b3a4a; }
-  .her { background: #7a3b5e; }
+  /* Textured gradient overlay + artwork preview */
+  .panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--cover, none);
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s ease;
+    z-index: 0;
+  }
 
-  .half:hover { flex: 1.3; }
-  .half:hover .cta { transform: translateX(4px); }
+  .panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.85) 100%),
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.04) 0%, transparent 60%);
+    z-index: 1;
+    transition: background 0.4s ease;
+  }
 
-  .half-content {
+  .him::after {
+    background:
+      linear-gradient(180deg, rgba(43,58,74,0.25) 0%, rgba(20,30,40,0.92) 100%),
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.05) 0%, transparent 60%);
+  }
+
+  .her::after {
+    background:
+      linear-gradient(180deg, rgba(122,59,94,0.25) 0%, rgba(60,25,45,0.92) 100%),
+      radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05) 0%, transparent 60%);
+  }
+
+  .panel:hover::before { transform: scale(1.06); }
+  .panel:hover::after { background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.75) 100%); }
+  .him:hover::after {
+    background: linear-gradient(180deg, rgba(43,58,74,0.1) 0%, rgba(20,30,40,0.8) 100%);
+  }
+  .her:hover::after {
+    background: linear-gradient(180deg, rgba(122,59,94,0.1) 0%, rgba(60,25,45,0.8) 100%);
+  }
+
+  .panel-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    justify-content: space-between;
+    align-items: flex-end;
   }
 
-  .half-content h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
+  .panel-meta { display: flex; flex-direction: column; gap: 0.3rem; }
+
+  .label {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.7rem;
+    opacity: 0.6;
   }
 
-  .half-content p {
-    font-size: 0.9rem;
-    opacity: 0.7;
+  .panel-meta h2 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .count {
+    font-size: 0.85rem;
+    opacity: 0.65;
+    margin-top: 0.15rem;
   }
 
   .cta {
-    margin-top: 0.75rem;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 500;
-    display: inline-block;
+    white-space: nowrap;
     transition: transform 0.2s;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 2px;
+  }
+
+  .panel:hover .cta {
+    transform: translateX(6px);
+    border-bottom-color: rgba(255,255,255,0.7);
+  }
+
+  /* Decorative line between panels */
+  .split::before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    background: rgba(255,255,255,0.08);
+    top: 5%;
+    bottom: 5%;
+    left: 50%;
+    z-index: 3;
   }
 
   @media (max-width: 640px) {
@@ -111,6 +203,10 @@ const herCount = allWorks.filter((w) => w.data.artist === 'her').length;
       grid-template-columns: 1fr;
       min-height: auto;
     }
-    .half { min-height: 30vh; }
+    .split::before { display: none; }
+    .panel {
+      min-height: 35vh;
+      padding: 2rem;
+    }
   }
 </style>
