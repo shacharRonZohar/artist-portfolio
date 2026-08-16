@@ -2,7 +2,7 @@
 title: "Untitled No. 4"
 artist: "ksenia-wert"
 description: "Watercolor study"
-image: "images/art/sample-4.svg"
+image: "images/art/ksenia-wert/sample-4.svg"
 date: 2024-08-10
 medium: "Watercolor on paper"
 dimensions: "14 x 20 in"

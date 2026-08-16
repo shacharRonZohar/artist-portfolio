@@ -2,7 +2,7 @@
 title: "Untitled No. 5"
 artist: "ksenia-wert"
 description: "Mixed media on wood"
-image: "images/art/sample-5.svg"
+image: "images/art/ksenia-wert/sample-5.svg"
 date: 2024-09-05
 medium: "Mixed media on wood"
 dimensions: "20 x 20 in"
