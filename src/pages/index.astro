@@ -26,7 +26,6 @@ const kseniaCount = kseniaWorks.length;
       <a href={`${base}max-wert/gallery`} class="panel max" style={maxCover ? `--cover: url('${base}${maxCover.replace(/^\//, '')}')` : ''}>
         <div class="panel-inner">
           <div class="panel-meta">
-            <span class="label">Artist No. 1</span>
             <h2>Max Wert</h2>
             <p class="count">{maxCount} {maxCount === 1 ? 'piece' : 'pieces'}</p>
           </div>
@@ -36,7 +35,6 @@ const kseniaCount = kseniaWorks.length;
       <a href={`${base}ksenia-wert/gallery`} class="panel ksenia" style={kseniaCover ? `--cover: url('${base}${kseniaCover.replace(/^\//, '')}')` : ''}>
         <div class="panel-inner">
           <div class="panel-meta">
-            <span class="label">Artist No. 2</span>
             <h2>Ksenia Wert</h2>
             <p class="count">{kseniaCount} {kseniaCount === 1 ? 'piece' : 'pieces'}</p>
           </div>
@@ -152,13 +150,6 @@ const kseniaCount = kseniaWorks.length;
   }
 
   .panel-meta { display: flex; flex-direction: column; gap: 0.3rem; }
-
-  .label {
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-size: 0.7rem;
-    opacity: 0.6;
-  }
 
   .panel-meta h2 {
     font-size: clamp(1.5rem, 3vw, 2.2rem);
