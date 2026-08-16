@@ -7,40 +7,40 @@ const allWorks = await getCollection('art');
 const sortByRecent = (a: typeof allWorks[number], b: typeof allWorks[number]) =>
   b.data.date.getTime() - a.data.date.getTime();
 
-const himWorks = allWorks.filter((w) => w.data.artist === 'him').sort(sortByRecent);
-const herWorks = allWorks.filter((w) => w.data.artist === 'her').sort(sortByRecent);
+const maxWorks = allWorks.filter((w) => w.data.artist === 'max-wert').sort(sortByRecent);
+const kseniaWorks = allWorks.filter((w) => w.data.artist === 'ksenia-wert').sort(sortByRecent);
 
-const himCover = himWorks[0]?.data.image;
-const herCover = herWorks[0]?.data.image;
-const himCount = himWorks.length;
-const herCount = herWorks.length;
+const maxCover = maxWorks[0]?.data.image;
+const kseniaCover = kseniaWorks[0]?.data.image;
+const maxCount = maxWorks.length;
+const kseniaCount = kseniaWorks.length;
 ---
 
-<Layout title="Two Artists" description="A portfolio of two artists">
+<Layout title="Max Wert & Ksenia Wert" description="A portfolio of two artists">
   <section class="hero">
     <div class="hero-intro">
       <span class="eyebrow">A shared portfolio</span>
-      <h1>Two Artists<span class="thin">,</span> One Canvas</h1>
+      <h1>Max Wert & Ksenia Wert</h1>
     </div>
     <div class="split">
-      <a href={`${base}him/gallery`} class="panel him" style={himCover ? `--cover: url('${base}${himCover.replace(/^\//, '')}')` : ''}>
+      <a href={`${base}max-wert/gallery`} class="panel max" style={maxCover ? `--cover: url('${base}${maxCover.replace(/^\//, '')}')` : ''}>
         <div class="panel-inner">
           <div class="panel-meta">
             <span class="label">Artist No. 1</span>
-            <h2>His Work</h2>
-            <p class="count">{himCount} {himCount === 1 ? 'piece' : 'pieces'}</p>
+            <h2>Max Wert</h2>
+            <p class="count">{maxCount} {maxCount === 1 ? 'piece' : 'pieces'}</p>
           </div>
-          <span class="cta">View his art &rarr;</span>
+          <span class="cta">View work &rarr;</span>
         </div>
       </a>
-      <a href={`${base}her/gallery`} class="panel her" style={herCover ? `--cover: url('${base}${herCover.replace(/^\//, '')}')` : ''}>
+      <a href={`${base}ksenia-wert/gallery`} class="panel ksenia" style={kseniaCover ? `--cover: url('${base}${kseniaCover.replace(/^\//, '')}')` : ''}>
         <div class="panel-inner">
           <div class="panel-meta">
             <span class="label">Artist No. 2</span>
-            <h2>Her Work</h2>
-            <p class="count">{herCount} {herCount === 1 ? 'piece' : 'pieces'}</p>
+            <h2>Ksenia Wert</h2>
+            <p class="count">{kseniaCount} {kseniaCount === 1 ? 'piece' : 'pieces'}</p>
           </div>
-          <span class="cta">View her art &rarr;</span>
+          <span class="cta">View work &rarr;</span>
         </div>
       </a>
     </div>
@@ -121,13 +121,13 @@ const herCount = herWorks.length;
     transition: background 0.4s ease;
   }
 
-  .him::after {
+  .max::after {
     background:
       linear-gradient(180deg, rgba(43,58,74,0.25) 0%, rgba(20,30,40,0.92) 100%),
       radial-gradient(circle at 30% 20%, rgba(255,255,255,0.05) 0%, transparent 60%);
   }
 
-  .her::after {
+  .ksenia::after {
     background:
       linear-gradient(180deg, rgba(122,59,94,0.25) 0%, rgba(60,25,45,0.92) 100%),
       radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05) 0%, transparent 60%);
@@ -135,10 +135,10 @@ const herCount = herWorks.length;
 
   .panel:hover::before { transform: scale(1.06); }
   .panel:hover::after { background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.75) 100%); }
-  .him:hover::after {
+  .max:hover::after {
     background: linear-gradient(180deg, rgba(43,58,74,0.1) 0%, rgba(20,30,40,0.8) 100%);
   }
-  .her:hover::after {
+  .ksenia:hover::after {
     background: linear-gradient(180deg, rgba(122,59,94,0.1) 0%, rgba(60,25,45,0.8) 100%);
   }
 

@@ -1,10 +1,12 @@
 import { defineCollection, z } from 'astro:content';
 
+const ARTIST_SLUGS = ['max-wert', 'ksenia-wert'] as const;
+
 const art = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    artist: z.enum(['him', 'her']),
+    artist: z.enum(ARTIST_SLUGS),
     description: z.string().optional(),
     image: z.string(),
     date: z.coerce.date(),

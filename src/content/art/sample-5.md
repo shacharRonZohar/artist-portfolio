@@ -1,6 +1,6 @@
 ---
 title: "Untitled No. 5"
-artist: "her"
+artist: "ksenia-wert"
 description: "Mixed media on wood"
 image: "images/art/sample-5.svg"
 date: 2024-09-05

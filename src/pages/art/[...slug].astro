@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import { getName, type ArtistSlug } from '../../data/artists';
 
 export async function getStaticPaths() {
   const works = await getCollection('art');
@@ -18,12 +19,13 @@ if (!work) {
   return Astro.redirect(base);
 }
 
+const artistName = getName(work.data.artist as ArtistSlug);
 const { Content } = await render(work);
 ---
 
 <Layout title={work.data.title} description={work.data.description}>
   <article class="detail">
-    <a href={`${base}${work.data.artist}/gallery`} class="back">&larr; {work.data.artist === 'him' ? 'His' : 'Her'} Gallery</a>
+    <a href={`${base}${work.data.artist}/gallery`} class="back">&larr; {artistName}</a>
     <img src={`${base}${work.data.image.replace(/^\//, '')}`} alt={work.data.title} />
     <div class="meta">
       <h1>{work.data.title}</h1>
