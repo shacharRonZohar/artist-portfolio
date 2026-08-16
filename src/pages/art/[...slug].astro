@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const works = await getCollection('art');
+  return works.map((work) => ({
+    params: { slug: work.slug },
+  }));
+}
+
+const base = import.meta.env.BASE_URL;
+const { slug } = Astro.params;
+const works = await getCollection('art');
+const work = works.find((w) => w.slug === slug);
+
+if (!work) {
+  return Astro.redirect(base);
+}
+
+const { Content } = await render(work);
+---
+
+<Layout title={work.data.title} description={work.data.description}>
+  <article class="detail">
+    <a href={base} class="back">&larr; Back</a>
+    <img src={`${base}${work.data.image.replace(/^\//, '')}`} alt={work.data.title} />
+    <div class="meta">
+      <h1>{work.data.title}</h1>
+      <dl>
+        {work.data.date && <div><dt>Date</dt><dd>{work.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</dd></div>}
+        {work.data.medium && <div><dt>Medium</dt><dd>{work.data.medium}</dd></div>}
+        {work.data.dimensions && <div><dt>Dimensions</dt><dd>{work.data.dimensions}</dd></div>}
+      </dl>
+      <div class="description">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .detail {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 2rem;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .back:hover { color: var(--fg); }
+
+  .detail > img {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .meta h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  dl div {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  dt { color: var(--muted); }
+  dd { font-weight: 500; }
+
+  .description {
+    color: #333;
+    line-height: 1.7;
+  }
+</style>
