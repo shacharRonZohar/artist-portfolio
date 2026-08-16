@@ -1,20 +1,10 @@
-#!/usr/bin/env node
-import { readdir, stat, mkdir, writeFile } from 'node:fs/promises';
-import { join, dirname, extname } from 'node:path';
+import { readdir, stat, mkdir, writeFile, rm } from 'node:fs/promises';
+import { join, extname } from 'node:path';
 
 const IMAGES_DIR = 'public/images/art';
 const CONTENT_DIR = 'src/content/art';
 
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.avif']);
-
-function cleanName(name) {
-  return name
-    .replace(/\.[^/.]+$/, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-    || 'untitled';
-}
 
 function titleCase(str) {
   return str
@@ -43,6 +33,21 @@ async function exists(path) {
   }
 }
 
+async function cleanupContentDir(artist) {
+  const artistContentDir = join(CONTENT_DIR, artist);
+  if (!(await exists(artistContentDir))) return;
+  for (const entry of await readdir(artistContentDir, { withFileTypes: true })) {
+    const path = join(artistContentDir, entry.name);
+    if (entry.isDirectory()) {
+      await rm(path, { recursive: true, force: true });
+    } else if (entry.name.endsWith('.md')) {
+      // Only remove generated entries, keep manually named files if needed.
+      // For now, remove all .md at artist level so we can regenerate with consistent names.
+      await rm(path, { force: true });
+    }
+  }
+}
+
 async function generate() {
   const artists = (await readdir(IMAGES_DIR, { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
@@ -52,6 +57,9 @@ async function generate() {
   let skipped = 0;
 
   for (const artist of artists) {
+    await cleanupContentDir(artist);
+    await mkdir(join(CONTENT_DIR, artist), { recursive: true });
+
     const artistPath = join(IMAGES_DIR, artist);
     const collections = (await readdir(artistPath, { withFileTypes: true }))
       .filter((entry) => entry.isDirectory())
@@ -59,28 +67,21 @@ async function generate() {
 
     for (const collection of collections) {
       const collectionPath = join(artistPath, collection);
-      const seen = new Set();
+      let index = 0;
 
       for await (const filePath of walk(collectionPath)) {
         const filename = filePath.slice(collectionPath.length + 1);
         const ext = extname(filename).toLowerCase();
         if (!IMAGE_EXTENSIONS.has(ext)) continue;
 
-        const base = cleanName(filename);
-        let slug = base;
-        let counter = 1;
-        while (seen.has(slug)) {
-          slug = `${base}-${counter++}`;
-        }
-        seen.add(slug);
-
-        const contentPath = join(CONTENT_DIR, artist, collection, `${slug}.md`);
+        index++;
+        const slug = `${collection}-${index}`;
+        const contentPath = join(CONTENT_DIR, artist, `${slug}.md`);
         if (await exists(contentPath)) {
           skipped++;
           continue;
         }
 
-        const index = Array.from(seen).indexOf(slug) + 1;
         const title = `${titleCase(collection)} ${index}`;
         const imagePath = `images/art/${artist}/${collection}/${filename}`;
         const date = new Date().toISOString().split('T')[0];
@@ -96,7 +97,6 @@ order: 0
 
 `;
 
-        await mkdir(dirname(contentPath), { recursive: true });
         await writeFile(contentPath, frontmatter);
         created++;
       }

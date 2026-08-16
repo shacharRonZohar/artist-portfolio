@@ -26,16 +26,23 @@ const { Content } = await render(work);
 <Layout title={work.data.title} description={work.data.description}>
   <article class="detail">
     <a href={`${base}${work.data.artist}/gallery`} class="back">&larr; {artistName}</a>
-    <img src={`${base}${work.data.image.replace(/^\//, '')}`} alt={work.data.title} />
-    <div class="meta">
-      <h1>{work.data.title}</h1>
-      <dl>
-        {work.data.date && <div><dt>Date</dt><dd>{work.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</dd></div>}
-        {work.data.medium && <div><dt>Medium</dt><dd>{work.data.medium}</dd></div>}
-        {work.data.dimensions && <div><dt>Dimensions</dt><dd>{work.data.dimensions}</dd></div>}
-      </dl>
-      <div class="description">
-        <Content />
+    <div class="stage">
+      <div class="image-cell">
+        <img src={`${base}${work.data.image.replace(/^\//, '')}`} alt={work.data.title} />
+      </div>
+      <div class="info-cell">
+        <div class="info-inner">
+          <span class="collection">{work.data.collection}</span>
+          <h1>{work.data.title}</h1>
+          <dl>
+            {work.data.date && <div><dt>Date</dt><dd>{work.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</dd></div>}
+            {work.data.medium && <div><dt>Medium</dt><dd>{work.data.medium}</dd></div>}
+            {work.data.dimensions && <div><dt>Dimensions</dt><dd>{work.data.dimensions}</dd></div>}
+          </dl>
+          <div class="description">
+            <Content />
+          </div>
+        </div>
       </div>
     </div>
   </article>
@@ -43,41 +50,82 @@ const { Content } = await render(work);
 
 <style>
   .detail {
-    max-width: 800px;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 180px);
+    min-height: 480px;
   }
 
   .back {
-    display: inline-block;
-    margin-bottom: 2rem;
+    flex: 0 0 auto;
     text-decoration: none;
     color: var(--muted);
     font-size: 0.9rem;
+    margin-bottom: 1rem;
   }
   .back:hover { color: var(--fg); }
 
-  .detail > img {
-    width: 100%;
-    margin-bottom: 2rem;
+  .stage {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(260px, 340px);
+    gap: 2rem;
+    min-height: 0;
   }
 
-  .meta h1 {
-    font-size: 1.5rem;
+  .image-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .image-cell img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .info-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .info-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .collection {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .info-cell h1 {
+    font-size: 1.4rem;
     font-weight: 600;
-    margin-bottom: 1rem;
+    line-height: 1.2;
   }
 
   dl {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 2rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.85rem;
   }
 
   dl div {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   dt { color: var(--muted); }
@@ -85,6 +133,25 @@ const { Content } = await render(work);
 
   .description {
     color: #333;
-    line-height: 1.7;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 800px) {
+    .detail {
+      height: auto;
+      min-height: auto;
+    }
+    .stage {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .image-cell {
+      height: 60vh;
+      max-height: 520px;
+    }
+    .info-cell {
+      overflow-y: visible;
+    }
   }
 </style>
