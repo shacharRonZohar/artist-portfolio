@@ -1,0 +1,58 @@
+media:
+  input: public/images/art
+  output: images/art
+  extensions: [jpg, jpeg, png, gif, webp, svg, avif]
+  rename: false
+
+content:
+  - name: art
+    label: Artwork
+    type: collection
+    path: src/content/art
+    subfolders: true
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: artist
+        type: select
+        required: true
+        options:
+          values:
+            - name: max-wert
+              label: Max Wert
+            - name: ksenia-wert
+              label: Ksenia Wert
+      - name: collection
+        type: string
+        required: true
+        description: Group name (e.g. "surrealistic", "portraits", "oil")
+      - name: image
+        type: image
+        required: true
+      - name: date
+        type: date
+        required: true
+      - name: description
+        type: text
+        label: Short description
+        description: Optional one-line summary
+      - name: medium
+        type: string
+        description: e.g. "Oil on canvas"
+      - name: dimensions
+        type: string
+        description: e.g. "24 x 36 in"
+      - name: order
+        type: number
+        description: Sort weight (higher = first). Defaults to 0.
+      - name: body
+        type: rich-text
+        label: Long description
+        description: Optional longer text shown on the artwork page

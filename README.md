@@ -46,9 +46,30 @@ The base path auto-detects from `GITHUB_REPOSITORY`. For a custom domain, set `s
 
 Edit `src/pages/about.astro` — add bio, artist statement, contact info.
 
+## Edit content via web CMS (for non-technical editors)
+
+The site uses [Pages CMS](https://pagescms.org) — a free, web-based editor that commits changes directly to this repo. No software to install.
+
+### One-time setup (developer)
+
+1. Invite the editor as a **collaborator** on the GitHub repo (Settings → Collaborators → Add people). They need **Write** access.
+2. The `.pages.yml` config file at the repo root is already in place — nothing else to configure.
+
+### For editors
+
+1. Go to **[app.pagescms.org](https://app.pagescms.org)**
+2. Sign in with GitHub (the account that was invited as collaborator)
+3. Select this repository
+4. Click **Artwork** in the sidebar
+5. Edit any piece — change the title, swap the image, update the medium/dimensions, etc.
+6. Click **Save** — Pages CMS commits to the repo, and the site rebuilds automatically within a minute
+
+You can also add new artwork: click **New entry**, fill in the fields, and upload the image directly in the browser.
+
 ## Stack
 
 - Astro 4 — static output, zero client JS
 - TypeScript — strict mode
 - Content Collections — type-safe markdown content
+- Pages CMS — web-based content editing (no server, no database)
 - GitHub Actions — build + deploy to Pages
